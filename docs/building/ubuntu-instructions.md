@@ -121,13 +121,13 @@ You should see JARs created for the supported Spark versions:
   1. Build the Worker
        ```bash
        cd ~/dotnet.spark/src/csharp/Microsoft.Spark.Worker/
-       dotnet publish -f netcoreapp2.1 -r ubuntu.18.04-x64
+       dotnet publish -f netcoreapp2.2 -r ubuntu.18.04-x64
        ```
        <details>
        <summary>&#x1F4D9; Click to see sample console output</summary>
         
        ```
-       user@machine:/home/user/dotnet.spark/src/csharp/Microsoft.Spark.Worker$ dotnet publish -f netcoreapp2.1 -r ubuntu.18.04-x64
+       user@machine:/home/user/dotnet.spark/src/csharp/Microsoft.Spark.Worker$ dotnet publish -f netcoreapp2.2 -r ubuntu.18.04-x64
 
        Welcome to .NET Core!
        ---------------------
@@ -147,8 +147,8 @@ You should see JARs created for the supported Spark versions:
        Generating MSBuild file /home/user/dotnet.spark/src/csharp/Microsoft.Spark.Worker/obj/Microsoft.Spark.Worker.csproj.nuget.g.targets.
        Restore completed in 37.09 sec for /home/user/dotnet.spark/src/csharp/Microsoft.Spark.Worker/Microsoft.Spark.Worker.csproj.
        Microsoft.Spark -> /home/user/dotnet.spark/src/csharp/Microsoft.Spark/bin/Debug/netstandard2.0/Microsoft.Spark.dll
-       Microsoft.Spark.Worker -> /home/user/dotnet.spark/src/csharp/Microsoft.Spark.Worker/bin/Debug/netcoreapp2.1/ubuntu.18.04-x64/Microsoft.Spark.Worker.dll
-       Microsoft.Spark.Worker -> /home/user/dotnet.spark/src/csharp/Microsoft.Spark.Worker/bin/Debug/netcoreapp2.1/ubuntu.18.04-x64/publish/
+       Microsoft.Spark.Worker -> /home/user/dotnet.spark/src/csharp/Microsoft.Spark.Worker/bin/Debug/netcoreapp2.2/ubuntu.18.04-x64/Microsoft.Spark.Worker.dll
+       Microsoft.Spark.Worker -> /home/user/dotnet.spark/src/csharp/Microsoft.Spark.Worker/bin/Debug/netcoreapp2.2/ubuntu.18.04-x64/publish/
        ```
        
        </details>
@@ -159,21 +159,21 @@ You should see JARs created for the supported Spark versions:
       ```
       cd ~/dotnet.spark/examples/Microsoft.Spark.CSharp.Examples/
       cat Microsoft.Spark.CSharp.Examples.csproj | grep -v "Microsoft.Spark.Worker.csproj" > Microsoft.Spark.CSharp.Examples.Patched.csproj
-      dotnet publish -f netcoreapp2.1 -r ubuntu.18.04-x64 Microsoft.Spark.CSharp.Examples.Patched.csproj
+      dotnet publish -f netcoreapp2.2 -r ubuntu.18.04-x64 Microsoft.Spark.CSharp.Examples.Patched.csproj
       ```
       
       **.NET Core 3.x**
       If you are using .NET Core 3.x, you can avoid creating a new patched `.csproj` file and instead compile the project directly:
       ```
       cd ~/dotnet.spark/examples/Microsoft.Spark.CSharp.Examples/
-      dotnet publish -f netcoreapp2.1 -r ubuntu.18.04-x64 Microsoft.Spark.CSharp.Examples.csproj
+      dotnet publish -f netcoreapp2.2 -r ubuntu.18.04-x64 Microsoft.Spark.CSharp.Examples.csproj
       ```
       
       <details>
       <summary>&#x1F4D9; Click to see sample console output</summary>
         
       ```
-      user@machine:/home/user/dotnet.spark/examples/Microsoft.Spark.CSharp.Examples$ dotnet publish -f netcoreapp2.1 -r ubuntu.18.04-x64 Microsoft.Spark.CSharp.Examples.Patched.csproj
+      user@machine:/home/user/dotnet.spark/examples/Microsoft.Spark.CSharp.Examples$ dotnet publish -f netcoreapp2.2 -r ubuntu.18.04-x64 Microsoft.Spark.CSharp.Examples.Patched.csproj
       Microsoft (R) Build Engine version 15.9.20+g88f5fadfbe for .NET Core
       Copyright (C) Microsoft Corporation. All rights reserved.
 
@@ -183,21 +183,21 @@ You should see JARs created for the supported Spark versions:
         Generating MSBuild file /home/user/dotnet.spark/examples/Microsoft.Spark.CSharp.Examples/obj/Microsoft.Spark.CSharp.Examples.Patched.csproj.nuget.g.targets.
         Restore completed in 305.72 ms for /home/user/dotnet.spark/examples/Microsoft.Spark.CSharp.Examples/Microsoft.Spark.CSharp.Examples.Patched.csproj.
         Microsoft.Spark -> /home/user/dotnet.spark/src/csharp/Microsoft.Spark/bin/Debug/netstandard2.0/Microsoft.Spark.dll
-        Microsoft.Spark.CSharp.Examples.Patched -> /home/user/dotnet.spark/examples/Microsoft.Spark.CSharp.Examples/bin/Debug/netcoreapp2.1/ubuntu.18.04-x64/Microsoft.Spark.CSharp.Examples.dll
-        Microsoft.Spark.CSharp.Examples.Patched -> /home/user/dotnet.spark/examples/Microsoft.Spark.CSharp.Examples/bin/Debug/netcoreapp2.1/ubuntu.18.04-x64/publish/       
+        Microsoft.Spark.CSharp.Examples.Patched -> /home/user/dotnet.spark/examples/Microsoft.Spark.CSharp.Examples/bin/Debug/netcoreapp2.2/ubuntu.18.04-x64/Microsoft.Spark.CSharp.Examples.dll
+        Microsoft.Spark.CSharp.Examples.Patched -> /home/user/dotnet.spark/examples/Microsoft.Spark.CSharp.Examples/bin/Debug/netcoreapp2.2/ubuntu.18.04-x64/publish/       
      ```
      
      </details>
   3. Manually copy Worker binaries into the Samples output location. 
      ```
-     cp ~/dotnet.spark/src/csharp/Microsoft.Spark.Worker/bin/Debug/netcoreapp2.1/ubuntu.18.04-x64/publish/* ~/dotnet.spark/examples/Microsoft.Spark.CSharp.Examples/bin/Debug/netcoreapp2.1/ubuntu.18.04-x64/publish/
+     cp ~/dotnet.spark/src/csharp/Microsoft.Spark.Worker/bin/Debug/netcoreapp2.2/ubuntu.18.04-x64/publish/* ~/dotnet.spark/examples/Microsoft.Spark.CSharp.Examples/bin/Debug/netcoreapp2.2/ubuntu.18.04-x64/publish/
      ```
 
 # Run Samples
 
 Once you build the samples, you can use `spark-submit` to submit your .NET Core apps. Make sure you have followed the [pre-requisites](#pre-requisites) section and installed Apache Spark.
 
-  1. Open a terminal and go to the directory where your app binary has been generated (e.g., `~/dotnet.spark/examples/Microsoft.Spark.CSharp.Examples/bin/Debug/netcoreapp2.1/ubuntu.18.04-x64/publish`)
+  1. Open a terminal and go to the directory where your app binary has been generated (e.g., `~/dotnet.spark/examples/Microsoft.Spark.CSharp.Examples/bin/Debug/netcoreapp2.2/ubuntu.18.04-x64/publish`)
   2. Running your app follows the basic structure:
      ```bash
      spark-submit \

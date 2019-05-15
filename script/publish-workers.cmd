@@ -7,8 +7,8 @@ set Build.ArtifactStagingDirectory=%2
 set Build.Configuration=%3
 
 CALL :PublishWorker net461, win-x64
-CALL :PublishWorker netcoreapp2.1, win-x64 
-CALL :PublishWorker netcoreapp2.1, linux-x64
+CALL :PublishWorker netcoreapp2.2, win-x64 
+CALL :PublishWorker netcoreapp2.2, linux-x64
 EXIT /B %ERRORLEVEL%
 
 :PublishWorker

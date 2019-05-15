@@ -39,7 +39,7 @@ Microsoft.Spark.Worker is a backend component that lives on the individual worke
 
 ## Microsoft.Spark.Worker
 1. Select a [Microsoft.Spark.Worker](https://github.com/dotnet/spark/releases) Linux netcoreapp release to be deployed on your cluster.
-   * For example, if you want `.NET for Apache Spark v0.1.0` using `netcoreapp2.1`, you'd download [Microsoft.Spark.Worker.netcoreapp2.1.linux-x64-0.1.0.tar.gz](https://github.com/dotnet/spark/releases/download/v0.1.0/Microsoft.Spark.Worker.netcoreapp2.1.linux-x64-0.1.0.tar.gz).
+   * For example, if you want `.NET for Apache Spark v0.1.0` using `netcoreapp2.2`, you'd download [Microsoft.Spark.Worker.netcoreapp2.2.linux-x64-0.1.0.tar.gz](https://github.com/dotnet/spark/releases/download/v0.1.0/Microsoft.Spark.Worker.netcoreapp2.2.linux-x64-0.1.0.tar.gz).
 2. Upload `Microsoft.Spark.Worker.<release>.tar.gz` and [install-worker.sh](install-worker.sh) to a distributed file system (e.g., HDFS, WASB, ADLS, S3, DBFS) that your cluster has access to.
 
 ## Preparing your Spark .NET App
@@ -47,12 +47,12 @@ Microsoft.Spark.Worker is a backend component that lives on the individual worke
 2. Publish your Spark .NET `app` as self-contained.
    ```shell
    # For example, you can run the following on Linux.
-   foo@bar:~/path/to/app$ dotnet publish -c Release -f netcoreapp2.1 -r ubuntu.16.04-x64
+   foo@bar:~/path/to/app$ dotnet publish -c Release -f netcoreapp2.2 -r ubuntu.16.04-x64
    ```
 3. Produce `<your app>.zip` for the published files.
    ```shell
    # For example, you can run the following on Linux using `zip`.
-   foo@bar:~/path/to/app/bin/Release/netcoreapp2.1/ubuntu.16.04-x64/publish$ zip -r <your app>.zip .
+   foo@bar:~/path/to/app/bin/Release/netcoreapp2.2/ubuntu.16.04-x64/publish$ zip -r <your app>.zip .
    ```
 4. Upload the following to a distributed file system (e.g., HDFS, WASB, ADLS, S3, DBFS) that your cluster has access to:
    * `microsoft-spark-<spark_majorversion.spark_minorversion.x>-<spark_dotnet_version>.jar` (Included as part of the [Microsoft.Spark](https://www.nuget.org/packages/Microsoft.Spark/) nuget and is colocated in your app's build output directory)

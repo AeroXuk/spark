@@ -10,14 +10,14 @@
 # Sample usage:
 # ./install-worker.sh
 #    github
-#    https://github.com/dotnet/spark/releases/download/v0.1.0/Microsoft.Spark.Worker.netcoreapp2.1.linux-x64-0.1.0.tar.gz
+#    https://github.com/dotnet/spark/releases/download/v0.1.0/Microsoft.Spark.Worker.netcoreapp2.2.linux-x64-0.1.0.tar.gz
 #    /usr/local/bin
 #
 # or if you have your Worker release on filesystem like ABFS, here's how the path would
 # look like:
 # ./install-worker.sh
 #    azure
-#    abfs://<blobcontainer>@<gen2storageaccount>.dfs.core.windows.net/<path>/Microsoft.Spark.Worker.netcoreapp2.1.linux-x64-0.1.0.tar.gz
+#    abfs://<blobcontainer>@<gen2storageaccount>.dfs.core.windows.net/<path>/Microsoft.Spark.Worker.netcoreapp2.2.linux-x64-0.1.0.tar.gz
 #    /usr/local/bin
 #
 ##############################################################################

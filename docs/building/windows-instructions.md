@@ -158,13 +158,13 @@ You should see JARs created for the supported Spark versions:
   1. Build the Worker
        ```
        cd C:\github\dotnet-spark\src\csharp\Microsoft.Spark.Worker\
-       dotnet publish -f netcoreapp2.1 -r win10-x64
+       dotnet publish -f netcoreapp2.2 -r win10-x64
        ```
        <details>
        <summary>&#x1F4D9; Click to see sample console output</summary>
         
        ```
-       PS C:\github\dotnet-spark\src\csharp\Microsoft.Spark.Worker> dotnet publish -f netcoreapp2.1 -r win10-x64
+       PS C:\github\dotnet-spark\src\csharp\Microsoft.Spark.Worker> dotnet publish -f netcoreapp2.2 -r win10-x64
        Microsoft (R) Build Engine version 15.9.20+g88f5fadfbe for .NET Core
        Copyright (C) Microsoft Corporation. All rights reserved.
 
@@ -174,8 +174,8 @@ You should see JARs created for the supported Spark versions:
        Generating MSBuild file C:\github\dotnet-spark\src\csharp\Microsoft.Spark.Worker\obj\Microsoft.Spark.Worker.csproj.nuget.g.targets.
        Restore completed in 230.49 ms for C:\github\dotnet-spark\src\csharp\Microsoft.Spark.Worker\Microsoft.Spark.Worker.csproj.
        Microsoft.Spark -> C:\github\dotnet-spark\src\csharp\Microsoft.Spark\bin\Debug\netstandard2.0\Microsoft.Spark.dll
-       Microsoft.Spark.Worker -> C:\github\dotnet-spark\src\csharp\Microsoft.Spark.Worker\bin\Debug\netcoreapp2.1\win10-x64\Microsoft.Spark.Worker.dll
-       Microsoft.Spark.Worker -> C:\github\dotnet-spark\src\csharp\Microsoft.Spark.Worker\bin\Debug\netcoreapp2.1\win10-x64\publish\
+       Microsoft.Spark.Worker -> C:\github\dotnet-spark\src\csharp\Microsoft.Spark.Worker\bin\Debug\netcoreapp2.2\win10-x64\Microsoft.Spark.Worker.dll
+       Microsoft.Spark.Worker -> C:\github\dotnet-spark\src\csharp\Microsoft.Spark.Worker\bin\Debug\netcoreapp2.2\win10-x64\publish\
        ```
        
        </details>
@@ -183,7 +183,7 @@ You should see JARs created for the supported Spark versions:
       ```
       cd C:\github\dotnet-spark\examples\Microsoft.Spark.CSharp.Examples\
       Get-Content .\Microsoft.Spark.CSharp.Examples.csproj | Where-Object {$_ -notmatch 'Microsoft.Spark.Worker.csproj'} | Set-Content .\Microsoft.Spark.CSharp.Examples.Patched.csproj
-      dotnet publish -f netcoreapp2.1 -r win10-x64 .\Microsoft.Spark.CSharp.Examples.Patched.csproj
+      dotnet publish -f netcoreapp2.2 -r win10-x64 .\Microsoft.Spark.CSharp.Examples.Patched.csproj
       ```
       Note the creation of a new patched `.csproj` file. This is due to a bug in .NET Core CLI that causes problems with building a dependency project that creates executables and we are working with the .NET team towards resolving this.
       
@@ -191,7 +191,7 @@ You should see JARs created for the supported Spark versions:
       <summary>&#x1F4D9; Click to see sample console output</summary>
         
       ```
-       PS C:\github\dotnet-spark\examples\Microsoft.Spark.CSharp.Examples> dotnet publish -f netcoreapp2.1 -r win10-x64 .\Microsoft.Spark.CSharp.Examples.Patched.csproj
+       PS C:\github\dotnet-spark\examples\Microsoft.Spark.CSharp.Examples> dotnet publish -f netcoreapp2.2 -r win10-x64 .\Microsoft.Spark.CSharp.Examples.Patched.csproj
        Microsoft (R) Build Engine version 15.9.20+g88f5fadfbe for .NET Core
        Copyright (C) Microsoft Corporation. All rights reserved.
 
@@ -203,21 +203,21 @@ You should see JARs created for the supported Spark versions:
        Restore completed in 208.34 ms for C:\github\dotnet-spark\examples\Microsoft.Spark.CSharp.Examples\Microsoft.Spark.CSharp.Examples.Patched.csproj.
        Restore completed in 208.34 ms for C:\github\dotnet-spark\src\csharp\Microsoft.Spark\Microsoft.Spark.csproj.
        Microsoft.Spark -> C:\github\dotnet-spark\src\csharp\Microsoft.Spark\bin\Debug\netstandard2.0\Microsoft.Spark.dll
-       Microsoft.Spark.CSharp.Examples.Patched -> C:\github\dotnet-spark\examples\Microsoft.Spark.CSharp.Examples\bin\Debug\netcoreapp2.1\win10-x64\Microsoft.Spark.CSharp.Examples.dll
-       Microsoft.Spark.CSharp.Examples.Patched -> C:\github\dotnet-spark\examples\Microsoft.Spark.CSharp.Examples\bin\Debug\netcoreapp2.1\win10-x64\publish\
+       Microsoft.Spark.CSharp.Examples.Patched -> C:\github\dotnet-spark\examples\Microsoft.Spark.CSharp.Examples\bin\Debug\netcoreapp2.2\win10-x64\Microsoft.Spark.CSharp.Examples.dll
+       Microsoft.Spark.CSharp.Examples.Patched -> C:\github\dotnet-spark\examples\Microsoft.Spark.CSharp.Examples\bin\Debug\netcoreapp2.2\win10-x64\publish\
      ```
      
      </details>
   3. Manually copy Worker binaries into the Samples output location. 
      ```
-     cp c:\github\dotnet-spark\src\csharp\Microsoft.Spark.Worker\bin\Debug\netcoreapp2.1\win10-x64\publish\* C:\github\dotnet-spark\examples\Microsoft.Spark.CSharp.Examples\bin\Debug\netcoreapp2.1\win10-x64\publish\
+     cp c:\github\dotnet-spark\src\csharp\Microsoft.Spark.Worker\bin\Debug\netcoreapp2.2\win10-x64\publish\* C:\github\dotnet-spark\examples\Microsoft.Spark.CSharp.Examples\bin\Debug\netcoreapp2.2\win10-x64\publish\
      ```
 
 # Run Samples
 
 Once you build the samples, running them will be through `spark-submit` regardless of whether you are targeting .NET Framework or .NET Core apps. Make sure you have followed the [pre-requisites](#pre-requisites) section and installed Apache Spark.
 
-  1. Open Powershell and go to the directory where your app binary has been generated (e.g., `c:\github\dotnet\spark\examples\Microsoft.Spark.CSharp.Examples\bin\Debug\net461` for .NET Framework, `c:\github\dotnet-spark\examples\Microsoft.Spark.CSharp.Examples\bin\Debug\netcoreapp2.1\win10-x64\publish` for .NET Core)
+  1. Open Powershell and go to the directory where your app binary has been generated (e.g., `c:\github\dotnet\spark\examples\Microsoft.Spark.CSharp.Examples\bin\Debug\net461` for .NET Framework, `c:\github\dotnet-spark\examples\Microsoft.Spark.CSharp.Examples\bin\Debug\netcoreapp2.2\win10-x64\publish` for .NET Core)
   2. Running your app follows the basic structure:
      ```powershell
      spark-submit.cmd `

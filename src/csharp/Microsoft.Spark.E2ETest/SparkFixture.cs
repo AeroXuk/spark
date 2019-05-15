@@ -34,7 +34,7 @@ namespace Microsoft.Spark.E2ETest
             Environment.SetEnvironmentVariable(
                 workerDirEnvVarName,
                 AppDomain.CurrentDomain.BaseDirectory);
-#elif NETCOREAPP2_1
+#elif NETCOREAPP
             // For .NET Core, the user must have published the worker as a standalone
             // executable and set DotnetWorkerPath to the published directory.
             if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable(workerDirEnvVarName)))
