@@ -16,6 +16,10 @@ variables:
   DOTNET_CLI_TELEMETRY_OPTOUT: 1
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
 
+  # Maven Cache
+  MAVEN_CACHE_FOLDER: $(Pipeline.Workspace)\.m2\repository
+  MAVEN_OPTS: '-Dmaven.repo.local=$(MAVEN_CACHE_FOLDER)'
+
 jobs:
 - job: Build
   displayName: Build and Test Sources
@@ -26,15 +30,21 @@ jobs:
       _OfficialBuildIdArgs: /p:OfficialBuildId=$(BUILD.BUILDNUMBER)
 
   steps:
+  - script: mkdir $(Pipeline.Workspace)\.m2
+  - script: cmdkey /add:aerox.file.core.windows.net /user:Azure\aerox /pass:$(STORAGEKEY)
+  - script: mklink /d "$(MAVEN_CACHE_FOLDER)" "\\aerox.file.core.windows.net\spark-maven\"
+
   - task: Maven@3
     displayName: 'Maven build src'
     inputs:
       mavenPomFile: src/scala/pom.xml
+      mavenOptions: $(MAVEN_OPTS)
 
   - task: Maven@3
     displayName: 'Maven build benchmark'
     inputs:
       mavenPomFile: benchmark/scala/pom.xml
+      mavenOptions: $(MAVEN_OPTS)
 
   - task: BatchScript@1
     displayName: Download Spark Distros & Winutils.exe
@@ -57,142 +67,16 @@ jobs:
       projects: '**/*UnitTest/*.csproj'
       arguments: '--configuration $(buildConfiguration)'
 
-  - task: DotNetCoreCLI@2
-    displayName: 'E2E tests for Spark 2.3.0'
+  - task: CopyFiles@2
+    displayName: Stage .NET artifacts
     inputs:
-      command: test
-      projects: '**/Microsoft.Spark.E2ETest/*.csproj'
-      arguments: '--configuration $(buildConfiguration)'
-    env:
-      SPARK_HOME: $(Build.BinariesDirectory)\spark-2.3.0-bin-hadoop2.7
-      HADOOP_HOME: $(Build.BinariesDirectory)\hadoop
-      DOTNET_WORKER_DIR: $(Build.ArtifactStagingDirectory)\Microsoft.Spark.Worker\netcoreapp2.1\win-x64
+      sourceFolder: $(Build.SourcesDirectory)/artifacts/packages/$(buildConfiguration)/Shipping
+      contents: |
+        **/*.nupkg
+        **/*.snupkg
+      targetFolder: $(Build.ArtifactStagingDirectory)/BuildArtifacts/artifacts/packages/$(buildConfiguration)/Shipping
 
-  - task: DotNetCoreCLI@2
-    displayName: 'E2E tests for Spark 2.3.1'
+  - task: PublishBuildArtifacts@1
     inputs:
-      command: test
-      projects: '**/Microsoft.Spark.E2ETest/*.csproj'
-      arguments: '--configuration $(buildConfiguration)'
-    env:
-      SPARK_HOME: $(Build.BinariesDirectory)\spark-2.3.1-bin-hadoop2.7
-      HADOOP_HOME: $(Build.BinariesDirectory)\hadoop
-      DOTNET_WORKER_DIR: $(Build.ArtifactStagingDirectory)\Microsoft.Spark.Worker\netcoreapp2.1\win-x64
-
-  - task: DotNetCoreCLI@2
-    displayName: 'E2E tests for Spark 2.3.2'
-    inputs:
-      command: test
-      projects: '**/Microsoft.Spark.E2ETest/*.csproj'
-      arguments: '--configuration $(buildConfiguration)'
-    env:
-      SPARK_HOME: $(Build.BinariesDirectory)\spark-2.3.2-bin-hadoop2.7
-      HADOOP_HOME: $(Build.BinariesDirectory)\hadoop
-      DOTNET_WORKER_DIR: $(Build.ArtifactStagingDirectory)\Microsoft.Spark.Worker\netcoreapp2.1\win-x64
-
-  - task: DotNetCoreCLI@2
-    displayName: 'E2E tests for Spark 2.3.3'
-    inputs:
-      command: test
-      projects: '**/Microsoft.Spark.E2ETest/*.csproj'
-      arguments: '--configuration $(buildConfiguration)'
-    env:
-      SPARK_HOME: $(Build.BinariesDirectory)\spark-2.3.3-bin-hadoop2.7
-      HADOOP_HOME: $(Build.BinariesDirectory)\hadoop
-      DOTNET_WORKER_DIR: $(Build.ArtifactStagingDirectory)\Microsoft.Spark.Worker\netcoreapp2.1\win-x64
-
-  - task: DotNetCoreCLI@2
-    displayName: 'E2E tests for Spark 2.4.0'
-    inputs:
-      command: test
-      projects: '**/Microsoft.Spark.E2ETest/*.csproj'
-      arguments: '--configuration $(buildConfiguration)'
-    env:
-      SPARK_HOME: $(Build.BinariesDirectory)\spark-2.4.0-bin-hadoop2.7
-      HADOOP_HOME: $(Build.BinariesDirectory)\hadoop
-      DOTNET_WORKER_DIR: $(Build.ArtifactStagingDirectory)\Microsoft.Spark.Worker\netcoreapp2.1\win-x64
-
-  - task: DotNetCoreCLI@2
-    displayName: 'E2E tests for Spark 2.4.1'
-    inputs:
-      command: test
-      projects: '**/Microsoft.Spark.E2ETest/*.csproj'
-      arguments: '--configuration $(buildConfiguration)'
-    env:
-      SPARK_HOME: $(Build.BinariesDirectory)\spark-2.4.1-bin-hadoop2.7
-      HADOOP_HOME: $(Build.BinariesDirectory)\hadoop
-      DOTNET_WORKER_DIR: $(Build.ArtifactStagingDirectory)\Microsoft.Spark.Worker\netcoreapp2.1\win-x64
-  
-  - task: DotNetCoreCLI@2
-    displayName: 'E2E tests for Spark 2.4.3'
-    inputs:
-      command: test
-      projects: '**/Microsoft.Spark.E2ETest/*.csproj'
-      arguments: '--configuration $(buildConfiguration)'
-    env:
-      SPARK_HOME: $(Build.BinariesDirectory)\spark-2.4.3-bin-hadoop2.7
-      HADOOP_HOME: $(Build.BinariesDirectory)\hadoop
-      DOTNET_WORKER_DIR: $(Build.ArtifactStagingDirectory)\Microsoft.Spark.Worker\netcoreapp2.1\win-x64
-
-  - ${{ if and(ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Reason'], 'PullRequest')) }}:
-    - task: CopyFiles@2
-      displayName: Stage .NET artifacts
-      inputs:
-        sourceFolder: $(Build.SourcesDirectory)/artifacts/packages/$(buildConfiguration)/Shipping
-        contents: |
-          **/*.nupkg
-          **/*.snupkg
-        targetFolder: $(Build.ArtifactStagingDirectory)/BuildArtifacts/artifacts/packages/$(buildConfiguration)/Shipping
-
-    - task: PublishBuildArtifacts@1
-      inputs:
-        pathtoPublish: '$(Build.ArtifactStagingDirectory)'
-        artifactName:  Microsoft.Spark.Binaries
-
-- ${{ if and(ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Reason'], 'PullRequest')) }}:
-  - job: SignPublish
-    dependsOn:
-      - Build
-    displayName: Sign and Publish Artifacts
-    pool:
-      name: NetCoreInternal-Int-Pool
-      queue: buildpool.windows.10.amd64.vs2017
-
-    variables:
-      ${{ if and(ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Reason'], 'PullRequest')) }}:
-        _OfficialBuildIdArgs: /p:OfficialBuildId=$(BUILD.BUILDNUMBER)
-
-    steps:
-    - task: DownloadBuildArtifacts@0
-      displayName: Download Build Artifacts
-      inputs:
-        artifactName: Microsoft.Spark.Binaries
-        downloadPath: $(Build.ArtifactStagingDirectory)
-    
-    - task: MicroBuildSigningPlugin@2
-      displayName: Install MicroBuild plugin
-      inputs:
-        signType: $(_SignType)
-        zipSources: false
-        feedSource: https://dnceng.pkgs.visualstudio.com/_packaging/MicroBuildToolset/nuget/v3/index.json
-      env:
-        TeamName: $(_TeamName)
-      condition: and(succeeded(), in(variables['_SignType'], 'real', 'test'), eq(variables['Agent.Os'], 'Windows_NT'))
-    
-    - task: PowerShell@2
-      displayName: Sign artifacts and Package Microsoft.Spark.Worker
-      inputs:
-        filePath: eng\common\build.ps1
-        arguments: -restore -sign -publish
-                   -c $(buildConfiguration)
-                   -ci
-                   $(_OfficialBuildIdArgs)
-                   /p:DotNetSignType=$(_SignType)
-                   /p:SparkPackagesDir=$(Build.ArtifactStagingDirectory)\Microsoft.Spark.Binaries\BuildArtifacts\artifacts\packages
-                   /p:SparkWorkerPublishDir=$(Build.ArtifactStagingDirectory)\Microsoft.Spark.Binaries\Microsoft.Spark.Worker
-                   /p:SparkWorkerPackageOutputDir=$(Build.ArtifactStagingDirectory)\Microsoft.Spark.Binaries
-
-    - task: PublishBuildArtifacts@1
-      inputs:
-        pathtoPublish: '$(Build.ArtifactStagingDirectory)/Microsoft.Spark.Binaries'
-        artifactName:  Microsoft.Spark.Binaries
+      pathtoPublish: '$(Build.ArtifactStagingDirectory)'
+      artifactName:  Microsoft.Spark.Binaries
